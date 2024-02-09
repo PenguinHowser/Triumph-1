@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://dbllnvgclnc6s"]
+
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3D.gd" id="2_0xe6n"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="3_bwbwl"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/camera_3D_resource.gd" id="4_rxme6"]
+[ext_resource type="Script" path="res://addons/phantom_camera/examples/scripts/3D/player_controller_third_person.gd" id="6_6ensl"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_rec0i"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h5obr"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="Resource" id="Resource_fsl0j"]
+script = ExtResource("4_rxme6")
+cull_mask = 1048575
+h_offset = 0.0
+v_offset = 0.0
+fov = 75.0
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+script = ExtResource("6_6ensl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_rec0i")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_h5obr")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D"]
+script = ExtResource("3_bwbwl")
+
+[node name="PlayerPhantomCamera3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+script = ExtResource("2_0xe6n")
+priority_override = false
+priority = 0
+follow_mode = 6
+follow_target = NodePath("..")
+follow_parameters/spring_arm/spring_length = 1.0
+follow_parameters/spring_arm/collision_mask = 1
+follow_parameters/spring_arm/shape = null
+follow_parameters/spring_arm/margin = 0.01
+follow_parameters/target_offset = Vector3(0, 0, 0)
+follow_parameters/damping = false
+look_at_mode = 0
+tween_parameters = null
+tween_on_load = true
+inactive_update_mode = 0
+camera_3D_resource = SubResource("Resource_fsl0j")
