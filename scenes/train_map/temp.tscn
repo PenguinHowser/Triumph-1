@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cm57iikr5ll8m"]
+
+[ext_resource type="PackedScene" uid="uid://drym75q748ap6" path="res://scenes/train_map/train_world.tscn" id="1_m5bso"]
+
+[node name="SubViewportContainer" type="SubViewportContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="."]
+render_target_update_mode = 4
+
+[node name="Node3D" parent="SubViewport" instance=ExtResource("1_m5bso")]

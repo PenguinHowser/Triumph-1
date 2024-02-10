@@ -1,53 +1,230 @@
-[gd_scene load_steps=8 format=3 uid="uid://dbllnvgclnc6s"]
+[gd_scene load_steps=16 format=3 uid="uid://dbllnvgclnc6s"]
 
-[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3D.gd" id="2_0xe6n"]
-[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="3_bwbwl"]
-[ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/camera_3D_resource.gd" id="4_rxme6"]
-[ext_resource type="Script" path="res://addons/phantom_camera/examples/scripts/3D/player_controller_third_person.gd" id="6_6ensl"]
+[ext_resource type="Script" path="res://Entities/player/player.gd" id="1_qia46"]
+[ext_resource type="Texture2D" uid="uid://coo7igqm32a7a" path="res://Assets/player/mr_k_behind.png" id="2_fog5d"]
+[ext_resource type="Texture2D" uid="uid://csel2r3rtscoa" path="res://Assets/player/mr_k_glow.png" id="3_dt1l7"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_rec0i"]
-size = Vector3(2, 2, 2)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xlt0a"]
+transparency = 1
+albedo_texture = ExtResource("3_dt1l7")
+emission_enabled = true
+emission = Color(1, 0.34902, 0.27451, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="Gradient" id="Gradient_c5s1n"]
+offsets = PackedFloat32Array(0.707792, 1)
+colors = PackedColorArray(0.173699, 1.87259e-07, 4.21144e-08, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nklni"]
+gradient = SubResource("Gradient_c5s1n")
+width = 128
+height = 900
+fill = 2
+fill_from = Vector2(0.5, 0.9)
+fill_to = Vector2(0.7, 0.8)
+metadata/_snap_enabled = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h5obr"]
-size = Vector3(2, 2, 2)
+size = Vector3(2, 2.4, 1)
 
-[sub_resource type="Resource" id="Resource_fsl0j"]
-script = ExtResource("4_rxme6")
-cull_mask = 1048575
-h_offset = 0.0
-v_offset = 0.0
-fov = 75.0
+[sub_resource type="Animation" id="Animation_f3pa8"]
+resource_name = "idle"
+
+[sub_resource type="Animation" id="Animation_vrfj3"]
+resource_name = "walk"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.1, 0, 0), Vector3(0.1, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Sprite3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0.0872665), Vector3(0, 0, -0.0872665)]
+}
+
+[sub_resource type="Animation" id="Animation_0c3km"]
+resource_name = "reset"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Sprite3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_k0rb1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Sprite3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_feit7"]
+_data = {
+"RESET": SubResource("Animation_k0rb1"),
+"idle": SubResource("Animation_f3pa8"),
+"reset": SubResource("Animation_0c3km"),
+"walk": SubResource("Animation_vrfj3")
+}
+
+[sub_resource type="Animation" id="Animation_ofd3n"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CamOrigin/SpringArm3D:spring_length")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CamOrigin/SpringArm3D/Camera3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_graux"]
+resource_name = "shoulder"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CamOrigin/SpringArm3D:spring_length")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [3.0, 0.5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CamOrigin/SpringArm3D/Camera3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.41672, 0.281282, 0.512614)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cb4md"]
+_data = {
+"RESET": SubResource("Animation_ofd3n"),
+"shoulder": SubResource("Animation_graux")
+}
 
 [node name="CharacterBody3D" type="CharacterBody3D"]
-script = ExtResource("6_6ensl")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+script = ExtResource("1_qia46")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_rec0i")
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.15, 0, 0, 0)
+shaded = true
+texture = ExtResource("2_fog5d")
+
+[node name="Sprite3D" type="Sprite3D" parent="Sprite3D"]
+material_override = SubResource("StandardMaterial3D_xlt0a")
+texture = ExtResource("3_dt1l7")
+
+[node name="Sprite3D2" type="Sprite3D" parent="Sprite3D"]
+transform = Transform3D(0.655993, 0.748155, -0.0996821, -0.747503, 0.662268, 0.0513852, 0.10446, 0.0408043, 0.993692, 7.10199, 0.0917158, 0.666667)
+texture = SubResource("GradientTexture2D_nklni")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0500001, 0)
 shape = SubResource("BoxShape3D_h5obr")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+[node name="CamOrigin" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 1, 0)
 
-[node name="PhantomCameraHost" type="Node" parent="Camera3D"]
-script = ExtResource("3_bwbwl")
+[node name="SpringArm3D" type="SpringArm3D" parent="CamOrigin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+spring_length = 3.0
 
-[node name="PlayerPhantomCamera3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
-script = ExtResource("2_0xe6n")
-priority_override = false
-priority = 0
-follow_mode = 6
-follow_target = NodePath("..")
-follow_parameters/spring_arm/spring_length = 1.0
-follow_parameters/spring_arm/collision_mask = 1
-follow_parameters/spring_arm/shape = null
-follow_parameters/spring_arm/margin = 0.01
-follow_parameters/target_offset = Vector3(0, 0, 0)
-follow_parameters/damping = false
-look_at_mode = 0
-tween_parameters = null
-tween_on_load = true
-inactive_update_mode = 0
-camera_3D_resource = SubResource("Resource_fsl0j")
+[node name="Camera3D" type="Camera3D" parent="CamOrigin/SpringArm3D"]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999996, 0, 0, 0, 0.999997, 1.37091e-06, 0.0990384, 2.82846)
+fov = 90.0
+
+[node name="Movement" type="AnimationPlayer" parent="."]
+root_node = NodePath("../CamMovement")
+libraries = {
+"": SubResource("AnimationLibrary_feit7")
+}
+autoplay = "idle"
+
+[node name="CamMovement" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cb4md")
+}
+autoplay = "RESET"
+
+[node name="UI" type="CanvasLayer" parent="."]
