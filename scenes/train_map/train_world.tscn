@@ -8,8 +8,8 @@
 shader = ExtResource("1_kgxdn")
 shader_parameter/enabled = true
 shader_parameter/dithering = true
-shader_parameter/colors = 12
-shader_parameter/dither_size = 2
+shader_parameter/colors = 9
+shader_parameter/dither_size = 3
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_siqde"]
 sky_top_color = Color(0.388235, 0.0352941, 0.0352941, 1)
